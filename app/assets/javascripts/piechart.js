@@ -1,25 +1,33 @@
-function drawChart() {
+$(window).ready(function(){
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(loadPieChart);
+})
 
-  var data = google.visualization.arrayToDataTable([
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
-  ]);
+function loadPieChart(){
 
-  var options = {
-    title: 'My Daily Activities'
+  var PieChartPrototype = Object.create(HTMLElement.prototype);
+  PieChartPrototype.attachedCallback = function() {
+    var data = google.visualization.arrayToDataTable([
+      ['Task', 'Hours per Day'],
+      ['Work',     11],
+      ['Eat',      2],
+      ['Commute',  2],
+      ['Watch TV', 2],
+      ['Sleep',    7]
+    ]);
+
+    var options = {
+      title: 'My Daily Activities',
+      width: 500,
+      height: 500
+    };
+
+    var chart = new google.visualization.PieChart(this);
+
+    chart.draw(data, options);
+
   };
 
-  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  document.registerElement('chartie-piechart', { prototype: PieChartPrototype } );
 
-  chart.draw(data, options);
 }
-
-document.addEventListener("turbolinks:load", function() {
-  if (document.getElementById('piechart')){
-    drawChart();
-  }
-})
